@@ -6,15 +6,16 @@ public static class ConnectionStrings
 
     static ConnectionStrings()
     {
-        var binDir = string.IsNullOrEmpty(AppDomain.CurrentDomain.RelativeSearchPath)
-                ? AppDomain.CurrentDomain.BaseDirectory
-                : AppDomain.CurrentDomain.RelativeSearchPath;
+        // Variable not worked when try add new migrations
+        //var binDir = string.IsNullOrEmpty(AppDomain.CurrentDomain.RelativeSearchPath)
+        //        ? AppDomain.CurrentDomain.BaseDirectory
+        //        : AppDomain.CurrentDomain.RelativeSearchPath;
 
         var env = FoudVestorPlatformEnvironment.GetEnvironment();
 
         var configuration = new ConfigurationBuilder()
-            .SetBasePath(binDir)
-            .AddJsonFile($"appsettings.{env}.dbconnection.json", false, true)
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile($"appsettings.{env}.dbconnection.json", optional: false, reloadOnChange: true)
             .Build();
 
         FoudVestor = configuration.GetConnectionString("FoudVestor")!;
