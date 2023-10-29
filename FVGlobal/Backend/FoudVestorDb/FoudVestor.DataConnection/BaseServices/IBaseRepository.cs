@@ -19,23 +19,14 @@ public interface IBaseRepository<T> where T : class
         await FoudVestorContext.Set<T>().Where(predicate).ExecuteDeleteAsync();
     }
 
-    public async Task<T?> GetFirstOrDefault(
-        Expression<Func<T, bool>> predicate,
-        CancellationToken cancellationToken = default)
-    {
-        return await FoudVestorContext.Set<T>()
-            .AsNoTracking()
-            .FirstOrDefaultAsync(predicate, cancellationToken);
-    }
-
-    public async Task<TResult?> GetFirstOrDefaultSelect<TResult>(
+    public async Task<TResult?> GetOneItem<TResult>(
         Expression<Func<T, TResult>> select,
         Expression<Func<T, bool>>? predicate = null,
         CancellationToken cancellationToken = default)
     {
         var query = FoudVestorContext.Set<T>().AsNoTracking();
 
-        if (predicate != null)
+        if (predicate is not null)
         {
             query = query.Where(predicate);
         }
@@ -44,65 +35,75 @@ public interface IBaseRepository<T> where T : class
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<ICollection<TResult>> GetListWithSelect<TResult>(
+    public async Task<ICollection<TResult>> GetItemList<TResult>(
         Expression<Func<T, TResult>> select,
         Expression<Func<T, bool>>? predicate = null,
         Expression<Func<T, object>>? sortPredicate = null,
-        int page = default,
-        int pageSize = default,
+        int skipItems = default,
+        int takeItems = default,
         bool ascending = true,
         CancellationToken cancellationToken = default)
     {
         var query = FoudVestorContext.Set<T>().AsNoTracking();
 
-        if (predicate != null)
+        if (predicate is not null)
         {
             query = query.Where(predicate);
         }
 
-        if (sortPredicate != null)
+        if (sortPredicate is not null)
         {
             query = ascending
                 ? query.OrderBy(sortPredicate)
                 : query.OrderByDescending(sortPredicate);
         }
 
-        if (page != default && pageSize != default)
+        if (takeItems != default)
         {
-            query = query.Skip(page * pageSize).Take(pageSize);
+            query = query.Skip(skipItems).Take(takeItems);
         }
 
         return await query.Select(select).ToListAsync(cancellationToken);
     }
 
-    public async Task<ICollection<T>> GetListWithoutSelect(
+    public async Task<(ICollection<TResult>, int)> GetItemListWithCount<TResult>(
+        Expression<Func<T, TResult>> select,
         Expression<Func<T, bool>>? predicate = null,
         Expression<Func<T, object>>? sortPredicate = null,
-        int page = default,
-        int pageSize = default,
+        int skipItems = default,
+        int takeItems = default,
         bool ascending = true,
         CancellationToken cancellationToken = default)
     {
         var query = FoudVestorContext.Set<T>().AsNoTracking();
 
-        if(predicate != null)
+        if (predicate is not null)
         {
             query = query.Where(predicate);
         }
 
-        if (sortPredicate != null)
+        if (sortPredicate is not null)
         {
             query = ascending
                 ? query.OrderBy(sortPredicate)
                 : query.OrderByDescending(sortPredicate);
         }
 
-        if (page != default && pageSize != default)
+        var count = await query.CountAsync(cancellationToken);
+
+        if (takeItems != default)
         {
-            query = query.Skip(page * pageSize).Take(pageSize);
+            query = query.Skip(skipItems).Take(takeItems);
         }
 
-        return await query.ToListAsync(cancellationToken);
+        var items = await query.Select(select).ToListAsync(cancellationToken);
+
+        return (items, count);
+    }
+
+    public async Task<int> GetCount(CancellationToken cancellationToken = default)
+    {
+        return await FoudVestorContext.Set<T>().CountAsync(cancellationToken);
     }
 
     public async Task<int> GetCount(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)

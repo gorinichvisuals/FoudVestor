@@ -8,4 +8,14 @@ internal sealed class CountryRepository : ICountryRepository
     {
         FoudVestorContext = context;
     }
+
+    public async Task UpdateCountry(Expression<Func<Country, bool>> predicate, 
+        string name, string countryCode, string threeLettersISOCode)
+    {
+        await FoudVestorContext.Countries.Where(predicate)
+            .ExecuteUpdateAsync(x => 
+                x.SetProperty(x => x.Name, name)
+                .SetProperty(x => x.CountryCode, countryCode)
+                .SetProperty(x => x.ThreeLetterISOCode, threeLettersISOCode));
+    }
 }

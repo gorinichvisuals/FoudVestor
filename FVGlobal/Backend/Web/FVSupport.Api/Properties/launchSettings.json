@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "FDSupport.Api": {
+    "FVSupport.Api": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

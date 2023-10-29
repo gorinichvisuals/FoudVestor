@@ -72,6 +72,10 @@ public class FoudVestorContext : DbContext
         modelBuilder.Entity<Project>().Property(x => x.CreatedAt).HasDefaultValueSql("getdate()");
         modelBuilder.Entity<Project>().Property(x => x.UpdatedAt).HasDefaultValueSql("getdate()");
 
+        modelBuilder.Entity<Country>().HasIndex(x => x.Name).IsUnique();
+        modelBuilder.Entity<Country>().HasIndex(x => x.CountryCode).IsUnique();
+        modelBuilder.Entity<Country>().HasIndex(x => x.ThreeLetterISOCode).IsUnique();
+
         modelBuilder.Entity<Company>().HasIndex(x => x.Name).IsUnique();
         modelBuilder.Entity<Company>().Property(x => x.CreatedAt).HasDefaultValueSql("getdate()");
         modelBuilder.Entity<Company>().Property(x => x.UpdatedAt).HasDefaultValueSql("getdate()");

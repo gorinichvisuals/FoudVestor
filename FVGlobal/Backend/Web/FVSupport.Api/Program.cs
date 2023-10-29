@@ -23,6 +23,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
 builder.Services.DataConfigureServices();
 builder.Services.CommonConfigureServices();
+builder.Services.SupportConfigureServices();
 
 builder.Services.AddAuthorization();
 builder.Configuration.AddEnvironmentVariables();
