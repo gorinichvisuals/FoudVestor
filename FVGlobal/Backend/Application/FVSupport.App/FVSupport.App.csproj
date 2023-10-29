@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\FoudVestorDb\FoudVestor.DataConnection\FoudVestor.DataConnection.csproj" />
+  </ItemGroup>
+
 </Project>

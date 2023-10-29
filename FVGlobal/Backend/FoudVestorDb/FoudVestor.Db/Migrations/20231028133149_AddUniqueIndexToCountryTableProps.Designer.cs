@@ -4,6 +4,7 @@ using FoudVestor.Db.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoudVestor.Db.Migrations
 {
     [DbContext(typeof(FoudVestorContext))]
-    partial class FoudVestorContextModelSnapshot : ModelSnapshot
+    [Migration("20231028133149_AddUniqueIndexToCountryTableProps")]
+    partial class AddUniqueIndexToCountryTableProps
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

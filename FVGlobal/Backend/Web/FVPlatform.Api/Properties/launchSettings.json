@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "FDPlatform.Api": {
+    "FVPlatform.Api": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

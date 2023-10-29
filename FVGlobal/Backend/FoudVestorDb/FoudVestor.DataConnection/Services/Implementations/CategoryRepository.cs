@@ -8,4 +8,11 @@ internal sealed class CategoryRepository : ICategoryRepository
     {
         FoudVestorContext = context;
     }
+
+    public async Task UpdateCategory(Expression<Func<Category, bool>> predicate, string categoryName)
+    {
+        await FoudVestorContext.Categories
+            .Where(predicate)
+            .ExecuteUpdateAsync(x => x.SetProperty(x => x.Name, categoryName));
+    }
 }
