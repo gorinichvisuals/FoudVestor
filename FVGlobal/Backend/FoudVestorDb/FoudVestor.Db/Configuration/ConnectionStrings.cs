@@ -6,12 +6,12 @@ public static class ConnectionStrings
 
     static ConnectionStrings()
     {
-        // Use binDir for Api
+        // Use this binDir for Api
         var binDir = string.IsNullOrEmpty(AppDomain.CurrentDomain.RelativeSearchPath)
-                ? AppDomain.CurrentDomain.BaseDirectory
-                : AppDomain.CurrentDomain.RelativeSearchPath;
+               ? AppDomain.CurrentDomain.BaseDirectory
+               : AppDomain.CurrentDomain.RelativeSearchPath;
 
-        //Use binDir for Migrations
+        //Use this binDir for Migrations
         //var binDir = Directory.GetCurrentDirectory();
 
         var env = FoudVestorPlatformEnvironment.GetEnvironment();

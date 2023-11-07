@@ -38,4 +38,8 @@ public sealed class PlatformSupport
     [StringLength(32)]
     [Required]
     public Role Role { get; set; }
+
+    [Required]
+    [Column("password")]
+    public string? Password { get; set; }
 }

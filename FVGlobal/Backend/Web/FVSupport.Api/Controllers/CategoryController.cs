@@ -2,7 +2,7 @@
 
 [Route("api/categories")]
 [ApiController]
-//[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin")]
 public class CategoryController : ControllerBase
 {
     private readonly ICategoryService categoryService;
@@ -30,18 +30,15 @@ public class CategoryController : ControllerBase
             var response = await categoryService.GetCategories(
                 skipItems, takeItems, orderByColumn, ascending, cancellationToken);
 
-            if (!response.Categories!.Any())
-            {
-                return StatusCode(FVPlatformStatusCodes.NoContent);
-            }
-
-            return StatusCode(FVPlatformStatusCodes.Ok, response);
+            return !response.Categories!.Any() 
+                ? StatusCode(FVPlatformStatusCodes.NoContent)
+                : StatusCode(FVPlatformStatusCodes.Ok, new { categories = response });
         }
         catch (Exception ex)
         {
             logger.LogError("Log error message: {ex}", ex.GetBaseException().Message);
 
-            return StatusCode(FVPlatformStatusCodes.InternalServerError, ex.Message);
+            return StatusCode(FVPlatformStatusCodes.InternalServerError, new { error = ex.Message });
         }
     }
 
@@ -57,13 +54,13 @@ public class CategoryController : ControllerBase
         {
             var response = await categoryService.CreateCategory(createDTO);
 
-            return StatusCode(FVPlatformStatusCodes.Created, response);
+            return StatusCode(FVPlatformStatusCodes.Created, new { category = response });
         }
         catch (Exception ex)
         {
             logger.LogError("Log error message: {ex}", ex.GetBaseException().Message);
 
-            return StatusCode(FVPlatformStatusCodes.InternalServerError, ex.Message);
+            return StatusCode(FVPlatformStatusCodes.InternalServerError, new { error = ex.Message });
         }
     }
 
@@ -80,18 +77,15 @@ public class CategoryController : ControllerBase
         {
             var response = await categoryService.UpdateCategory(updateDTO, categoryId);
 
-            if (!response.IsSucceed)
-            {
-                return StatusCode(response.StatusCode, new { error = response.ErrorMessage });
-            }
-
-            return StatusCode(FVPlatformStatusCodes.Ok, response.GetResponse());
+            return response.IsSucceed
+                ? StatusCode(response.StatusCode, new { category = response.GetResponse() })
+                : StatusCode(response.StatusCode, new { error = response.ErrorMessage });
         }
         catch (Exception ex)
         {
             logger.LogError("Log error message: {ex}", ex.GetBaseException().Message);
 
-            return StatusCode(FVPlatformStatusCodes.InternalServerError, ex.Message);
+            return StatusCode(FVPlatformStatusCodes.InternalServerError, new { error = ex.Message });
         }
     }
 
@@ -107,18 +101,15 @@ public class CategoryController : ControllerBase
         {
             var response = await categoryService.DeleteCategory(categoryId);
 
-            if (!response.IsSucceed)
-            {
-                return StatusCode(response.StatusCode, new { error = response.ErrorMessage });
-            }
-
-            return StatusCode(response.StatusCode);
+            return response.IsSucceed
+                ? StatusCode(response.StatusCode)
+                : StatusCode(response.StatusCode, new { error = response.ErrorMessage });
         }
         catch (Exception ex)
         {
             logger.LogError("Log error message: {ex}", ex.GetBaseException().Message);
 
-            return StatusCode(FVPlatformStatusCodes.InternalServerError, ex.Message);
+            return StatusCode(FVPlatformStatusCodes.InternalServerError, new { error = ex.Message });
         }
     }
 }

@@ -2,4 +2,5 @@
 
 public interface IInvestorRepository : IBaseRepository<Investor>
 {
+    Task UpdateLastLogin(Expression<Func<Investor, bool>> predicateExpression);
 }

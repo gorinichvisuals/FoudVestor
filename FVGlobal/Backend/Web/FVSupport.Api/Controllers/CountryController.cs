@@ -2,7 +2,7 @@
 
 [Route("api/countries")]
 [ApiController]
-//[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin")]
 public class CountryController : ControllerBase
 {
     private readonly ICountryService countryService;
@@ -41,7 +41,7 @@ public class CountryController : ControllerBase
         {
             logger.LogError("Log error message: {ex}", ex.GetBaseException().Message);
 
-            return StatusCode(FVPlatformStatusCodes.InternalServerError, ex.Message);
+            return StatusCode(FVPlatformStatusCodes.InternalServerError, new { error = ex.Message });
         }
     }
 
@@ -57,13 +57,13 @@ public class CountryController : ControllerBase
         {
             var response = await countryService.CreateCountry(createDTO);
 
-            return StatusCode(FVPlatformStatusCodes.Created, response);
+            return StatusCode(FVPlatformStatusCodes.Created, new { country = response });
         }
         catch (Exception ex)
         {
             logger.LogError("Log error message: {ex}", ex.GetBaseException().Message);
 
-            return StatusCode(FVPlatformStatusCodes.InternalServerError, ex.Message);
+            return StatusCode(FVPlatformStatusCodes.InternalServerError, new { error = ex.Message });
         }
     }
 
@@ -80,18 +80,15 @@ public class CountryController : ControllerBase
         {
             var response = await countryService.UpdateCountry(updateDTO, countryId);
 
-            if (!response.IsSucceed)
-            {
-                return StatusCode(response.StatusCode, new { error = response.ErrorMessage });
-            }
-
-            return StatusCode(FVPlatformStatusCodes.Ok, response.GetResponse());
+            return response.IsSucceed
+                ? StatusCode(response.StatusCode, new { country = response.GetResponse() })
+                : StatusCode(response.StatusCode, new { error = response.ErrorMessage });
         }
         catch (Exception ex)
         {
             logger.LogError("Log error message: {ex}", ex.GetBaseException().Message);
 
-            return StatusCode(FVPlatformStatusCodes.InternalServerError, ex.Message);
+            return StatusCode(FVPlatformStatusCodes.InternalServerError, new { error = ex.Message });
         }
     }
 
@@ -107,18 +104,15 @@ public class CountryController : ControllerBase
         {
             var response = await countryService.DeleteCountry(countryId);
 
-            if (!response.IsSucceed)
-            {
-                return StatusCode(response.StatusCode, new { error = response.ErrorMessage });
-            }
-
-            return StatusCode(response.StatusCode);
+            return response.IsSucceed
+                ? StatusCode(response.StatusCode)
+                : StatusCode(response.StatusCode, new { error = response.ErrorMessage });
         }
         catch (Exception ex) 
         {
             logger.LogError("Log error message: {ex}", ex.GetBaseException().Message);
 
-            return StatusCode(FVPlatformStatusCodes.InternalServerError, ex.Message);
+            return StatusCode(FVPlatformStatusCodes.InternalServerError, new { error = ex.Message });
         }
     }
 }
