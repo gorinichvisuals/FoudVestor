@@ -8,4 +8,13 @@ internal sealed class FounderRepository : IFounderRepository
     {
         FoudVestorContext = context;
     }
+
+    public async Task UpdateLastLogin(Expression<Func<Founder, bool>> predicateExpression)
+    {
+        DateTime lastLogin = DateTime.UtcNow;
+
+        await FoudVestorContext.Founders
+            .Where(predicateExpression)
+            .ExecuteUpdateAsync(x => x.SetProperty(x => x.LastLoginTime, lastLogin));
+    }
 }

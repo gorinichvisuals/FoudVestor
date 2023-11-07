@@ -59,6 +59,10 @@ public sealed class Investor
     [Column("updated_at")]
     public DateTime UpdatedAt { get; set; }
 
+    [Required]
+    [Column("password")]
+    public string? Password { get; set; }
+
     public Country? Country { get; set; }
     public InvestorSubscription? Subscription { get; set; }
     public ICollection<InvestorArea>? InvestorAreas { get; set; }

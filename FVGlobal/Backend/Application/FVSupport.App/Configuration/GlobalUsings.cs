@@ -9,3 +9,4 @@ global using FVCommon.Constants;
 global using FVSupport.App.DTO.Category;
 global using FVCommon.Constants.OrderConstants;
 global using System.Linq.Expressions;
+global using System.ComponentModel.DataAnnotations;

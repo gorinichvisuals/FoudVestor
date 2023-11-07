@@ -59,6 +59,10 @@ public sealed class Founder
     [Column("updated_at")]
     public DateTime UpdatedAt { get; set; }
 
+    [Required]
+    [Column("password")]
+    public string? Password { get; set; }
+
     public ICollection<ProjectToFounder>? FounderProjects { get; set; }
     public Country? Country { get; set; }
     public Company? Company { get; set; }

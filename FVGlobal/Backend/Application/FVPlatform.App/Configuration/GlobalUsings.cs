@@ -1,0 +1,16 @@
+﻿global using Microsoft.Extensions.DependencyInjection;
+global using FVPlatform.App.Services.Abstractions;
+global using FVPlatform.App.Services.Implementations;
+global using FoudVestor.DataConnection.BaseServices;
+global using FVPlatform.App.DTO.Founder;
+global using FoudVestor.Db.Models;
+global using FVPlatform.App.DTO.FounderSubscription;
+global using FVCommon.Services.Abstractions;
+global using FVCommon.Enums;
+global using System.ComponentModel.DataAnnotations;
+global using FVCommon.App;
+global using FVCommon.Constants;
+global using FVPlatform.App.DTO.Internal;
+global using FVPlatform.App.DTO.Common;
+global using FVPlatform.App.DTO.Investor;
+global using FVPlatform.App.DTO.InvestorSubscription;

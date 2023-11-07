@@ -8,4 +8,13 @@ internal sealed class InvestorRepository : IInvestorRepository
     {
         FoudVestorContext = context;
     }
+
+    public async Task UpdateLastLogin(Expression<Func<Investor, bool>> predicateExpression)
+    {
+        DateTime lastLogin = DateTime.UtcNow;
+
+        await FoudVestorContext.Investors
+            .Where(predicateExpression)
+            .ExecuteUpdateAsync(x => x.SetProperty(x => x.LastLoginTime, lastLogin));
+    }
 }
